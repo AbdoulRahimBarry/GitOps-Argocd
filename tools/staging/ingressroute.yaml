@@ -1,0 +1,51 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd-server
+  namespace: argocd
+spec:
+  entryPoints:
+  - websecure
+  routes:
+  - kind: Rule
+    match: Host(`argocd.tools.preprod.k8s.tlmq.fr`)
+    services:
+    - name: argocd-server
+      port: 80
+      # # secure web_ui
+      # limite personne to acces to your dns
+    middlewares:
+      - name: ipwhitelist
+  tls:
+    secretName: argocd-cert
+
+# argocd --grpc-web app list --server argocd.demo.telemaque.fr --auth-token
+ 
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: https-only
+  namespace: argocd
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd-server-http
+  namespace: argocd
+spec:
+  entryPoints:
+  - web
+  routes:
+  - kind: Rule
+    match: Host(`argocd.tools.preprod.k8s.tlmq.fr`)
+    services:
+    - name: argocd-server
+      port: 80
+    middlewares:
+    - name: https-only

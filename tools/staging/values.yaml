@@ -1,0 +1,21 @@
+global:
+  image:
+    repository: argoproj/argocd
+    tag: v1.8.7
+    imagePullPolicy: IfNotPresent
+
+server:
+  extraArgs:
+    - --insecure
+
+  config:
+    application.instanceLabelKey: argocd.argoproj.io/instance
+    repositories: |
+       - url: git@github.com:telemaqueHQ/DevOps.git
+         sshPrivateKeySecret:
+           name: ssh-repos
+           key: githubPrivateKey
+
+  ## reference https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/rbac.md
+  rbacConfig:
+    policy.default: role:admin
