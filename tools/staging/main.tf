@@ -12,7 +12,7 @@ provider "helm" {
 
 provider "kubernetes" {
   config_path    = "~/.kube/config"
-  config_context = "gke_infrastructure-176114_europe-west1-c_private-tools-tlmq-preprod"
+  config_context = "user to context ==> kubectl config current-context"
 }
 
 resource "kubernetes_namespace" "argocd" {
