@@ -12,10 +12,6 @@ spec:
     services:
     - name: argocd-server
       port: 80
-      # # secure web_ui
-      # limite personne to acces to your dns
-    middlewares:
-      - name: ipwhitelist
   tls:
     secretName: argocd-cert
  
