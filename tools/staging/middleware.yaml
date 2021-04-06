@@ -1,9 +1,0 @@
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: ipwhitelist
-  namespace: argocd
-spec:
-  ipWhiteList:
-    sourceRange:
-      - 12.234.69.3_
