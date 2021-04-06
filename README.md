@@ -1,8 +1,5 @@
 # Argo CD-GitOps for Kubernetes
-Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.
-
-## How it works
-Argo CD follows the GitOps pattern of using Git repositories as the source of truth for defining the desired application state.
+This project allows you to install Argo CD, argo cd is a declarative, GitOps continuous delivery tool for Kubernetes.
 
 ## Note:
 This project has been tested on a GKE cluster, but can work on any cluster.
@@ -27,3 +24,43 @@ gcloud container clusters get-credentials cluster_name --zone zone_name --projec
 ```
 
 I used Helm and kubernetes provider in Terraform to install and configure Argocd
+
+
+## Installing Argo CD
+Check in `value.yaml` the custom configurations
+
+### Exposing the Argo CD dashboard
+The dashboard access could be achieved through a port-forward
+```
+kubectl -n argocd port-forward svc/argocd-server 8080:443
+```
+
+Now head to http://127.0.0.1:8080 and you should be able to see the Argo CD dashboard
+
+## Ingress controller, TLS and HTTPS access
+
+If you want to manage external access to services in a cluster, TLS and HTTPS access [see here](https://github.com/AbdoulRahimBarry/traefik-cert-manager-letsencrypt)
+
+## Exposing the Argo CD dashboard
+You can access the dasboard in your owner dns.
+Check `ingressroute.yaml` file to have example. Executed objects in order
+
+## Usage
+
+```
+cd GitOps-Argocd/tools/staging/
+terraform init
+terraform plan
+terraform apply
+```
+
+*If you want to manage external access to services in a cluster, TLS and HTTPS access*
+```
+kubectl apply -f certificate.yaml
+kubectl apply -f ingressroute.yaml
+```
+
+## Reference
+* [Argocd documentation](https://argoproj.github.io/argo-cd/)
+* [argoproj argocd-helm](https://github.com/argoproj/argo-helm)
+* [traefik-cert-manager-letsencrypt](https://github.com/AbdoulRahimBarry/traefik-cert-manager-letsencrypt)
